@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Enaza.Exceptions;
 using Enaza.Models;
 using Enaza.Repositories;
 
@@ -28,6 +29,10 @@ namespace Enaza.Services
 
 		public async Task<UserModel> AddUser(string login, string password)
 		{
+			var userWithSameLogin = await _userRepository.GetUserByLogin(login);
+			if (userWithSameLogin != null)
+				throw new UserWithSameLoginAlreadyAddedException();
+
 			var user = new UserModel
 			{
 				Login = login,
@@ -37,6 +42,7 @@ namespace Enaza.Services
 			};
 
 			var addedUser = await _userRepository.AddUser(user);
+			await _userRepository.SaveChanges();
 			return addedUser;
 		}
 

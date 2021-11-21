@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Enaza.DTO;
 using Enaza.Mappers;
 using Enaza.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace Enaza.Controllers
 {
@@ -13,11 +15,15 @@ namespace Enaza.Controllers
 	{
 		private readonly IUserService _userService;
 		private readonly IUserMapper _userMapper;
+		private readonly IWebHostEnvironment _environment;
 
-		public UserController(IUserService userService, IUserMapper userMapper)
+		public UserController(IUserService userService,
+			IUserMapper userMapper,
+			IWebHostEnvironment environment)
 		{
 			_userService = userService;
 			_userMapper = userMapper;
+			_environment = environment;
 		}
 
 		[HttpGet("{id:int}")]
@@ -40,7 +46,9 @@ namespace Enaza.Controllers
 		public async Task<IActionResult> AddUser([FromBody] AddUserRequestDto addUserRequestDto)
 		{
 			var userModel = await _userService.AddUser(addUserRequestDto.Login, addUserRequestDto.Password);
-			await Task.Delay(5 * 1000);
+			if (_environment.IsProduction())
+				await Task.Delay(5 * 1000);
+
 			return Ok(userModel);
 		}
 

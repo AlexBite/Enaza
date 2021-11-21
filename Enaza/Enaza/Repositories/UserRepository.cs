@@ -19,7 +19,10 @@ namespace Enaza.Repositories
 
 		public async Task<List<UserModel>> GetAllUsers()
 		{
-			var users = await _dbContext.Users.ToListAsync();
+			var users = await _dbContext.Users.Include(u => u.UserGroup)
+				.Include(u => u.UserState)
+				.ToListAsync();
+
 			return users;
 		}
 
@@ -50,6 +53,11 @@ namespace Enaza.Repositories
 		{
 			var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Login == login);
 			return user;
+		}
+
+		public async Task SaveChanges()
+		{
+			await _dbContext.SaveChangesAsync();
 		}
 	}
 }
