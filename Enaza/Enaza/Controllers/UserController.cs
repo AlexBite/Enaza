@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Enaza.DTO;
 using Enaza.Mappers;
 using Enaza.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,9 @@ namespace Enaza.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddUser(string login, string password)
+		public async Task<IActionResult> AddUser([FromBody] AddUserRequestDto addUserRequestDto)
 		{
-			var userModel = await _userService.AddUser(login, password);
+			var userModel = await _userService.AddUser(addUserRequestDto.Login, addUserRequestDto.Password);
 			await Task.Delay(5 * 1000);
 			return Ok(userModel);
 		}
