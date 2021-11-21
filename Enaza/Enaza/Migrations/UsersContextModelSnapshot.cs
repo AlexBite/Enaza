@@ -58,6 +58,10 @@ namespace Enaza.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("UserGroupId");
+
+                    b.HasIndex("UserStateId");
+
                     b.ToTable("Users");
                 });
 
@@ -77,6 +81,35 @@ namespace Enaza.Migrations
                     b.HasKey("UserStateId");
 
                     b.ToTable("UserStates");
+                });
+
+            modelBuilder.Entity("Enaza.Models.UserModel", b =>
+                {
+                    b.HasOne("Enaza.Models.UserGroupModel", "UserGroup")
+                        .WithMany("Users")
+                        .HasForeignKey("UserGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Enaza.Models.UserStateModel", "UserState")
+                        .WithMany("Users")
+                        .HasForeignKey("UserStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserGroup");
+
+                    b.Navigation("UserState");
+                });
+
+            modelBuilder.Entity("Enaza.Models.UserGroupModel", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Enaza.Models.UserStateModel", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,8 @@ namespace Enaza.Models
 		public string Login { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public int UserGroupId { get; set; }
+		public UserGroupModel UserGroup { get; set; }
 		public int UserStateId { get; set; }
+		public UserStateModel UserState { get; set; }
 	}
 }

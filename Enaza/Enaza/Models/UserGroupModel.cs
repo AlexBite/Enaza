@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Enaza.Models
 {
@@ -8,5 +9,6 @@ namespace Enaza.Models
 		public int UserGroupId { get; set; }
 		public string Code { get; set; }
 		public string Description { get; set; }
+		public ICollection<UserModel> Users { get; set; }
 	}
 }
