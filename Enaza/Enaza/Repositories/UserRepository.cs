@@ -25,7 +25,10 @@ namespace Enaza.Repositories
 
 		public async Task<UserModel> GetUserById(int id)
 		{
-			var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+			var user = await _dbContext.Users.Include(u => u.UserGroup)
+				.Include(u => u.UserState)
+				.FirstOrDefaultAsync(u => u.UserId == id);
+
 			return user;
 		}
 
