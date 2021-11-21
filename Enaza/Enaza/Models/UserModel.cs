@@ -7,6 +7,7 @@ namespace Enaza.Models
 	{
 		[Key]
 		public int UserId { get; private set; }
+
 		public string Login { get; set; }
 		public string Password { get; set; }
 		public DateTime CreatedDate { get; set; }

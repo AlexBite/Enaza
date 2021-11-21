@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Enaza.Contexts;
 using Enaza.Mappers;
 using Enaza.Repositories;
@@ -23,7 +24,10 @@ namespace Enaza
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers();
+			services.AddControllers().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+			});
 			services.AddDbContext<UsersContext>(options =>
 			{
 				var connectionString = Configuration.GetConnectionString("DbConnection");

@@ -8,7 +8,7 @@ namespace Enaza.Services
 	{
 		Task<List<UserModel>> GetAllUsers();
 		Task<UserModel> GetUser(int userId);
-		Task<UserModel> AddUser(string login, string password);
+		Task<UserModel> AddUser(string login, string password, UserGroup userGroup);
 		Task DeleteUser(int userId);
 	}
 }

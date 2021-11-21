@@ -9,8 +9,9 @@ namespace Enaza.Repositories
 		Task<List<UserModel>> GetAllUsers();
 		Task<UserModel> GetUserById(int id);
 		Task<UserModel> AddUser(UserModel user);
-		Task<UserModel> MarkUserAsBlocked(int id);
 		Task<UserModel> GetUserByLogin(string login);
 		Task SaveChanges();
+		Task<UserGroupModel> GetUserGroup(UserGroup userGroup);
+		Task<UserStateModel> GetUserState(UserState userState);
 	}
 }

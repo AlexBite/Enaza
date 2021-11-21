@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Enaza.DTO;
+using Enaza.Exceptions;
 using Enaza.Mappers;
+using Enaza.Models;
 using Enaza.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +32,9 @@ namespace Enaza.Controllers
 		public async Task<IActionResult> GetUser(int id)
 		{
 			var userModel = await _userService.GetUser(id);
+			if (userModel == null)
+				return NotFound();
+
 			var userDto = _userMapper.MapModelToDto(userModel);
 			return Ok(userDto);
 		}
@@ -45,11 +50,21 @@ namespace Enaza.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddUser([FromBody] AddUserRequestDto addUserRequestDto)
 		{
-			var userModel = await _userService.AddUser(addUserRequestDto.Login, addUserRequestDto.Password);
+			UserModel addedUser;
+			try
+			{
+				addedUser = await _userService.AddUser(addUserRequestDto.Login, addUserRequestDto.Password,
+					addUserRequestDto.UserGroup);
+			}
+			catch (UserWithSameLoginAlreadyAddedException e)
+			{
+				return Conflict(e.Message);
+			}
+
 			if (_environment.IsProduction())
 				await Task.Delay(5 * 1000);
 
-			return Ok(userModel);
+			return Ok(addedUser);
 		}
 
 		[HttpDelete("{id:int}")]

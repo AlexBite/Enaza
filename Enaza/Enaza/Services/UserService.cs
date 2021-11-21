@@ -27,18 +27,20 @@ namespace Enaza.Services
 			return user;
 		}
 
-		public async Task<UserModel> AddUser(string login, string password)
+		public async Task<UserModel> AddUser(string login, string password, UserGroup userGroup)
 		{
 			var userWithSameLogin = await _userRepository.GetUserByLogin(login);
 			if (userWithSameLogin != null)
-				throw new UserWithSameLoginAlreadyAddedException();
+				throw new UserWithSameLoginAlreadyAddedException("User with same login is already added");
 
+			var userGroupModel = await _userRepository.GetUserGroup(userGroup);
+			var activeUserState = await _userRepository.GetUserState(UserState.Active);
 			var user = new UserModel
 			{
 				Login = login,
 				Password = password,
-				UserGroupId = 0,
-				UserStateId = 0
+				UserGroup = userGroupModel,
+				UserState = activeUserState
 			};
 
 			var addedUser = await _userRepository.AddUser(user);
@@ -48,7 +50,10 @@ namespace Enaza.Services
 
 		public async Task DeleteUser(int userId)
 		{
-			await _userRepository.MarkUserAsBlocked(userId);
+			var user = await _userRepository.GetUserById(userId);
+			var blockedUserState = await _userRepository.GetUserState(UserState.Blocked);
+			user.UserState = blockedUserState;
+			await _userRepository.SaveChanges();
 		}
 	}
 }
