@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
@@ -82,7 +83,8 @@ namespace Enaza.Controllers
 			if (_environment.IsProduction())
 				await Task.Delay(5 * 1000);
 
-			return Ok(addedUser);
+			var userDto = _userMapper.MapModelToDto(addedUser);
+			return Ok(userDto);
 		}
 
 		[HttpDelete("{id:int}")]
@@ -91,7 +93,15 @@ namespace Enaza.Controllers
 			Description = "User not found")]
 		public async Task<IActionResult> DeleteUser(int id)
 		{
-			await _userService.DeleteUser(id);
+			try
+			{
+				await _userService.DeleteUser(id);
+			}
+			catch (UserNotFoundException e)
+			{
+				return NotFound(new BaseErrorResponseDto(e.Message));
+			}
+
 			return Ok();
 		}
 	}

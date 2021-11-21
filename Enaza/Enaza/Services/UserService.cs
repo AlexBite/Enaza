@@ -57,6 +57,7 @@ namespace Enaza.Services
 			var user = await _userRepository.GetUserById(userId);
 			if (user == null)
 				throw new UserNotFoundException($"User with ID:{userId} is not found");
+
 			var blockedUserState = await _userRepository.GetUserState(UserState.Blocked);
 			user.UserState = blockedUserState;
 			await _userRepository.SaveChanges();
