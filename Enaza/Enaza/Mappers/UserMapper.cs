@@ -12,8 +12,18 @@ namespace Enaza.Mappers
 				Id = user.UserId,
 				Login = user.Login,
 				CreatedDate = user.CreatedDate,
-				UserGroup = null,
-				UserState = null
+				UserGroup = new UserGroupDto
+				{
+					Id = user.UserGroup.UserGroupId,
+					Code = user.UserGroup.Code.ToString(),
+					Description = user.UserGroup.Description
+				},
+				UserState = new UserStateDto
+				{
+					Id = user.UserState.UserStateId,
+					Code = user.UserState.Code.ToString(),
+					Description = user.UserState.Description
+				}
 			};
 		}
 	}
