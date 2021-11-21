@@ -1,4 +1,7 @@
 using Enaza.Contexts;
+using Enaza.Mappers;
+using Enaza.Repositories;
+using Enaza.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +29,10 @@ namespace Enaza
 				var connectionString = Configuration.GetConnectionString("DbConnection");
 				options.UseSqlServer(connectionString);
 			});
+
+			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IUserMapper, UserMapper>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
