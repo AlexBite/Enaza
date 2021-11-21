@@ -2,7 +2,7 @@
 
 namespace Enaza.Exceptions
 {
-	public class UserWithSameLoginAlreadyAddedException : Exception
+	public class UserWithSameLoginAlreadyAddedException : BaseException
 	{
 		public UserWithSameLoginAlreadyAddedException(string msg) : base(msg)
 		{

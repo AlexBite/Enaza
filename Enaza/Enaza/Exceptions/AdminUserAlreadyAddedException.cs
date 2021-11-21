@@ -2,7 +2,7 @@
 
 namespace Enaza.Exceptions
 {
-	public class AdminUserAlreadyAddedException : Exception
+	public class AdminUserAlreadyAddedException : BaseException
 	{
 		public AdminUserAlreadyAddedException(string msg) : base(msg)
 		{
