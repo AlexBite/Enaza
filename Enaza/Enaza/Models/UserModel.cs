@@ -8,6 +8,7 @@ namespace Enaza.Models
 		[Key]
 		public int UserId { get; set; }
 		public string Login { get; set; }
+		public string Password { get; set; }
 		public DateTime CreatedDate { get; set; }
 		public int UserGroupId { get; set; }
 		public UserGroupModel UserGroup { get; set; }

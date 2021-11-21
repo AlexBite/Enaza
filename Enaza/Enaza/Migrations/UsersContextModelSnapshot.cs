@@ -50,6 +50,9 @@ namespace Enaza.Migrations
                     b.Property<string>("Login")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserGroupId")
                         .HasColumnType("int");
 
