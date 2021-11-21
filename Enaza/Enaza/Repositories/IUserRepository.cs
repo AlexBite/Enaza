@@ -10,6 +10,6 @@ namespace Enaza.Repositories
 		Task<UserModel> GetUserById(int id);
 		Task<UserModel> AddUser(UserModel user);
 		Task<UserModel> MarkUserAsBlocked(int id);
-		Task<UserModel> GetUserByLogin(int id);
+		Task<UserModel> GetUserByLogin(string login);
 	}
 }
