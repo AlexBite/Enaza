@@ -13,5 +13,6 @@ namespace Enaza.Repositories
 		Task SaveChanges();
 		Task<UserGroupModel> GetUserGroup(UserGroup userGroup);
 		Task<UserStateModel> GetUserState(UserState userState);
+		Task<bool> IsAdminUserExists();
 	}
 }

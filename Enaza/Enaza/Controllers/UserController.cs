@@ -56,6 +56,10 @@ namespace Enaza.Controllers
 				addedUser = await _userService.AddUser(addUserRequestDto.Login, addUserRequestDto.Password,
 					addUserRequestDto.UserGroup);
 			}
+			catch (AdminUserAlreadyAddedException e)
+			{
+				return Conflict(e.Message);
+			}
 			catch (UserWithSameLoginAlreadyAddedException e)
 			{
 				return Conflict(e.Message);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Enaza.Contexts;
 using Enaza.Models;
@@ -45,6 +46,12 @@ namespace Enaza.Repositories
 		{
 			var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Login == login);
 			return user;
+		}
+
+		public async Task<bool> IsAdminUserExists()
+		{
+			var adminGroup = await _dbContext.UserGroups.FirstAsync(ug => ug.Code == UserGroup.Admin);
+			return adminGroup.Users.Any();
 		}
 
 		public async Task SaveChanges()
