@@ -23,15 +23,12 @@ namespace Enaza.Controllers
 	{
 		private readonly IUserService _userService;
 		private readonly IUserMapper _userMapper;
-		private readonly IWebHostEnvironment _environment;
 
 		public UserController(IUserService userService,
-			IUserMapper userMapper,
-			IWebHostEnvironment environment)
+			IUserMapper userMapper)
 		{
 			_userService = userService;
 			_userMapper = userMapper;
-			_environment = environment;
 		}
 
 		[HttpGet("{id:int}")]
@@ -80,8 +77,7 @@ namespace Enaza.Controllers
 				return Conflict(new BaseErrorResponseDto(e.Message));
 			}
 
-			if (_environment.IsProduction())
-				await Task.Delay(5 * 1000);
+			await Task.Delay(5 * 1000);
 
 			var userDto = _userMapper.MapModelToDto(addedUser);
 			return Ok(userDto);

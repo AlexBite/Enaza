@@ -34,8 +34,8 @@ namespace Enaza.Services
 				throw new UserWithSameLoginAlreadyAddedException("User with same login is already added");
 
 			var isAdminUserExists = await _userRepository.IsAdminUserExists();
-			var isAdminCanBeAdded = isAdminUserExists && userGroup == UserGroup.Admin;
-			if (isAdminCanBeAdded)
+			var isAttemptToAddOneMoreAdmin = isAdminUserExists && userGroup == UserGroup.Admin;
+			if (isAttemptToAddOneMoreAdmin)
 				throw new AdminUserAlreadyAddedException("Only one administrator can be in the system");
 
 			var userGroupModel = await _userRepository.GetUserGroup(userGroup);
