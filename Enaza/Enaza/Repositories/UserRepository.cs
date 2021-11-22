@@ -50,7 +50,9 @@ namespace Enaza.Repositories
 
 		public async Task<bool> IsAdminUserExists()
 		{
-			var adminGroup = await _dbContext.UserGroups.FirstAsync(ug => ug.Code == UserGroup.Admin);
+			var adminGroup = await _dbContext.UserGroups.Include(ug => ug.Users)
+				.FirstAsync(ug => ug.Code == UserGroup.Admin);
+
 			return adminGroup.Users.Any();
 		}
 
