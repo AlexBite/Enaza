@@ -7,6 +7,7 @@ namespace Enaza.Contexts
 	{
 		public UsersContext(DbContextOptions<UsersContext> options) : base(options)
 		{
+			Database.EnsureCreated();
 		}
 
 		public DbSet<UserModel> Users { get; set; }
