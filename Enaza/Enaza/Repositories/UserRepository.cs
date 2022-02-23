@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Enaza.Contexts;
+using Enaza.Exceptions;
 using Enaza.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Enaza.Repositories
@@ -37,8 +38,22 @@ namespace Enaza.Repositories
 
 		public async Task<UserModel> AddUser(UserModel user)
 		{
+			await Task.Delay(5 * 1000);
 			user.CreatedDate = DateTime.UtcNow;
 			var addedUser = await _dbContext.Users.AddAsync(user);
+			try
+			{
+				await _dbContext.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex)
+			{
+				if (!(ex.InnerException is SqlException sqlException))
+					throw;
+
+				if (sqlException.Number == 2601)
+					throw new UserWithSameLoginAlreadyAddedException("");
+			}
+
 			return addedUser.Entity;
 		}
 
@@ -50,15 +65,10 @@ namespace Enaza.Repositories
 
 		public async Task<bool> IsAdminUserExists()
 		{
-			var adminGroup = await _dbContext.UserGroups.Include(ug => ug.Users)
-				.FirstAsync(ug => ug.Code == UserGroup.Admin);
+			var isAdminUserExists = await _dbContext.UserGroups.Include(ug => ug.Users)
+				.AnyAsync(ug => ug.Code == UserGroup.Admin);
 
-			return adminGroup.Users.Any();
-		}
-
-		public async Task SaveChanges()
-		{
-			await _dbContext.SaveChangesAsync();
+			return isAdminUserExists;
 		}
 
 		public async Task<UserGroupModel> GetUserGroup(UserGroup userGroup)
@@ -71,6 +81,12 @@ namespace Enaza.Repositories
 		{
 			var userStateModel = await _dbContext.UserStates.FirstOrDefaultAsync(us => us.Code == userState);
 			return userStateModel;
+		}
+
+		public async Task MarkAsBlocked(UserModel user)
+		{
+			user.UserStateId = (int) UserState.Blocked;
+			await _dbContext.SaveChangesAsync();
 		}
 	}
 }

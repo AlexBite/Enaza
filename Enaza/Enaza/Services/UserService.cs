@@ -49,7 +49,6 @@ namespace Enaza.Services
 			};
 
 			var addedUser = await _userRepository.AddUser(user);
-			await _userRepository.SaveChanges();
 			return addedUser;
 		}
 
@@ -59,9 +58,7 @@ namespace Enaza.Services
 			if (user == null)
 				throw new UserNotFoundException($"User with ID:{userId} is not found");
 
-			var blockedUserState = await _userRepository.GetUserState(UserState.Blocked);
-			user.UserState = blockedUserState;
-			await _userRepository.SaveChanges();
+			await _userRepository.MarkAsBlocked(user);
 		}
 	}
 }

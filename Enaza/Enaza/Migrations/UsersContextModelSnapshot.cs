@@ -49,7 +49,7 @@ namespace Enaza.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -61,6 +61,10 @@ namespace Enaza.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("Login")
+                        .IsUnique()
+                        .HasFilter("[Login] IS NOT NULL");
 
                     b.HasIndex("UserGroupId");
 

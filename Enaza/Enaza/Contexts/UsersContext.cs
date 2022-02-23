@@ -12,5 +12,12 @@ namespace Enaza.Contexts
 		public DbSet<UserModel> Users { get; set; }
 		public DbSet<UserGroupModel> UserGroups { get; set; }
 		public DbSet<UserStateModel> UserStates { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<UserModel>()
+				.HasIndex(u => u.Login)
+				.IsUnique();
+		}
 	}
 }

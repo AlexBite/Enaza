@@ -61,7 +61,7 @@ namespace Enaza
 			app.UseHttpsRedirection();
 
 			app.UseRouting();
-
+			app.UseHttpLogging();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
